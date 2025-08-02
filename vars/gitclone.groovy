@@ -1,3 +1,6 @@
 def call(String url, String branch, String credId) {
-    git credentialsId: credId, url: url, branch: branch
+    withCredentials([string(credentialsId: credId, variable: 'GIT_TOKEN')]) {
+        def authUrl = url.replace('https://', "https://${GIT_TOKEN}@")
+        git url: authUrl, branch: branch
+    }
 }
